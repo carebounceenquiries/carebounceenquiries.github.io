@@ -1,4 +1,4 @@
-CaRe Bounce - holding page
+CaRe Bounce - holding page 
 ==========================
 Updated 5 November 2026. These files are served by GitHub Pages at
 carebounce.co.za.

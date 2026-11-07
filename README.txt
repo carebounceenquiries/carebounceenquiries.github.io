@@ -1,4 +1,4 @@
-CaRe Bounce - holding page 
+CaRe Bounce - holding page
 ==========================
 Updated 5 November 2026. These files are served by GitHub Pages at
 carebounce.co.za.
@@ -45,7 +45,7 @@ DNS - WHAT POINTS WHERE
     A      @     185.199.111.153
     CNAME  www   carebounceenquiries.github.io
 
-  DO NOT TOUCH the 3 MX records or the 2 TXT records. Those are the Zoho
+  DO NOT TOUCH the 3 MX records or the 3 TXT records (SPF, Zoho verification, and the Google Search Console verification added 7 Nov 2026 - deleting that one silently loses Search Console). Those are the Zoho
   email. Changing them stops info@carebounce.co.za receiving mail.
 
   After any DNS change, send a test email to info@carebounce.co.za from a

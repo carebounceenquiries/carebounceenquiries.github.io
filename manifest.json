@@ -1,0 +1,43 @@
+{
+  "id": "/",
+  "name": "CaRe Bounce - jumping castle, soft play and bubble house hire",
+  "short_name": "CaRe Bounce",
+  "description": "Jumping castles, soft play and bubble houses for children's parties across Centurion, Midrand, Pretoria and the north of Johannesburg. Delivered, set up and anchored by us.",
+  "lang": "en-ZA",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#FFF8EE",
+  "theme_color": "#FFF8EE",
+  "categories": [
+    "entertainment",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "/favicon-96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

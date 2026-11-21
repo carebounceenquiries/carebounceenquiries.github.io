@@ -538,6 +538,33 @@ input:focus,select:focus{border-color:var(--sky);outline:none}
 
 
 
+/* ---------- the picker, on a phone ----------
+   Measured at 375px: the description was getting 174 of the card's 335px,
+   about half, because it sat in a flex row between the checkbox and the
+   price. Three or four words a line, and the Experiences options ran to
+   1612px of scrolling for four items.
+
+   On a narrow screen the card becomes a grid instead: name and price share
+   the top row, and the description spans the full width underneath. The
+   price needs its column only on that first row, so the text below gets all
+   of it. display:contents on .opt-body lets its two children take part in
+   the card's grid without another wrapper. */
+@media (max-width:620px){
+  .opt-card{display:grid;grid-template-columns:auto 1fr auto;
+    column-gap:12px;row-gap:5px;align-items:start;padding:16px 16px}
+  .opt-body{display:contents}
+  .opt-check{grid-column:1;grid-row:1;align-self:center;margin-top:0}
+  .opt-name{grid-column:2;grid-row:1;align-self:center;margin:0}
+  .opt-cost{grid-column:3;grid-row:1;align-self:center}
+  .opt-note{grid-column:2 / span 2;grid-row:2;margin:0}
+  #experiences .opt-card{padding:20px 2px 20px 4px}
+  /* the serif names are 26px, which on a 375px screen wrapped "The romantic
+     pop-up bubble tent" onto three lines once the price column took its
+     share. 20px fits the long ones in two. */
+  #experiences .opt-name,
+  #experiences .opt-cost{font-size:20px;margin:0}
+}
+
 /* ---------- the experiences scene: a drawing that previews itself ----------
    The illustration is the resting state. Every few seconds it crossfades to a
    clip of the real thing, then comes back. Further pieces drop in here as

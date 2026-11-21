@@ -1824,6 +1824,12 @@ function cbDeliveryFee(km){
 }
 
 /* ---- experiences picker: same mechanics as the party one ---- */
+/* One WhatsApp number for both forms. It used to be declared inside the
+   Kids picker only, while the Experiences fallback referenced it from a
+   different IIFE - so that fallback threw ReferenceError and the visitor
+   got no message at all when the relay failed. */
+var CAREBOUNCE_WA = '27650782754';
+
 (function(){
   /* The bundle discount: a rand ladder, not a percentage.
 
@@ -1982,6 +1988,8 @@ function cbDeliveryFee(km){
     }
   }
 
+  var WA = CAREBOUNCE_WA;
+
   /* both tent cards are the same tent. Ticking one unticks the other, so
      nobody can build a quote that charges for the tent twice. */
   if(basket && tent){
@@ -2085,6 +2093,15 @@ function cbDeliveryFee(km){
         body: JSON.stringify(payload)
       })
       .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function(d){
+        /* FormSubmit can answer 200 OK and still not have sent anything: the
+           body then reads {"success":"false"}. Checking only the status in that
+           case shows the customer "we will come back to you today" while the
+           enquiry is gone, which is worse than an honest error, because the
+           WhatsApp fallback below never gets offered. The body has to agree too. */
+        if(d && String(d.success) === 'false') throw new Error(d.message || 'relay refused');
+        return d;
+      })
       .then(function(){
         msg.textContent = name + ', we will come back to you today about '
           + (pretty || 'the date') + ' in ' + where + '.';
@@ -2346,7 +2363,7 @@ function cbDeliveryFee(km){
      visitor is handed a pre-filled WhatsApp message instead, so an enquiry
      is never silently lost - which is what this form used to do. */
   var ENDPOINT = 'https://formsubmit.co/ajax/info@carebounce.co.za';
-  var WA = '27650782754';
+  var WA = CAREBOUNCE_WA;
 
   var errEl  = document.getElementById('qErr');
   var sendEl = document.getElementById('qSend');
@@ -2443,6 +2460,15 @@ function cbDeliveryFee(km){
       body: JSON.stringify(payload)
     })
     .then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(d){
+      /* FormSubmit can answer 200 OK and still not have sent anything: the
+         body then reads {"success":"false"}. Checking only the status in that
+         case shows the customer "we will come back to you today" while the
+         enquiry is gone, which is worse than an honest error, because the
+         WhatsApp fallback below never gets offered. The body has to agree too. */
+      if(d && String(d.success) === 'false') throw new Error(d.message || 'relay refused');
+      return d;
+    })
     .then(function(){
       msg.textContent = name + ', we will come back to you on WhatsApp today to confirm '
         + (pretty || 'the date') + ' in ' + where + '.';

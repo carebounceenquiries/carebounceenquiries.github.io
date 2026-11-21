@@ -1663,15 +1663,50 @@ table.rs tr.is-flagged td:first-child,table.rs tr.is-flagged td:nth-child(2){box
   if(!btn || !nav) return;
   var open = btn.querySelector('.m-open'), close = btn.querySelector('.m-close');
 
+  var openedAt = 0;
+
+  function why(){ return window.scrollY || document.documentElement.scrollTop || 0; }
+
   function set(isOpen){
     nav.classList.toggle('open', isOpen);
     btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     open.hidden = isOpen; close.hidden = !isOpen;
+    if(isOpen) openedAt = why();
   }
   btn.addEventListener('click', function(){ set(!nav.classList.contains('open')); });
   nav.addEventListener('click', function(e){ if(e.target.tagName === 'A') set(false); });
   document.addEventListener('keydown', function(e){
     if(e.key === 'Escape' && nav.classList.contains('open')){ set(false); btn.focus(); }
+  });
+
+  /* Scrolling closes it. On a phone the open menu covers most of the screen,
+     so leaving it up while the page moves underneath means the visitor has to
+     find the button again to see anything. The 8px threshold is there because
+     opening the menu can itself nudge the scroll position by a pixel or two,
+     and closing instantly on that would make the button look broken. */
+  function maybeClose(){
+    if(!nav.classList.contains('open')) return;
+    if(Math.abs(why() - openedAt) > 8) set(false);
+  }
+  /* Listening on window does NOT work here: the root carries overflow:clip,
+     so the document scrolls without window ever receiving a scroll event -
+     measured, scrollY went 0 to 150 and the handler never ran. Capture phase
+     on document catches it whichever element is actually scrolling. */
+  document.addEventListener('scroll', maybeClose, true);
+
+  /* and a finger drag, which on a phone starts moving the page before any
+     scroll position has changed */
+  window.addEventListener('touchmove', function(e){
+    if(!nav.classList.contains('open')) return;
+    if(nav.contains(e.target)) return;
+    set(false);
+  }, { passive: true });
+
+  /* Tapping anywhere else closes it too, which is what every app does. */
+  document.addEventListener('click', function(e){
+    if(!nav.classList.contains('open')) return;
+    if(nav.contains(e.target) || btn.contains(e.target)) return;
+    set(false);
   });
 })();
 
